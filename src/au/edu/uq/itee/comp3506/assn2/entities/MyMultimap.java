@@ -1,29 +1,57 @@
 package au.edu.uq.itee.comp3506.assn2.entities;
 
 /**
- * Implemetation of Multimap using map and list
+ * Implementation of Multimap using MyMap and MyList
  * 
- * Reference: textbook pp.449-450
+ * Memory Efficiency: O(n), for storing n map entries in the worst case.
+ * 					  It would take less space if multiple map entries have same key
+ * 					  since all values associate with same key will be put into the value list of that key.
  * 
- * @author Qishi Zheng
+ * @author Qishi Zheng <Student No. 43759453>.
  *
- * @param <K>
- * @param <V>
+ * @param <K>	key
+ * @param <V>	value
  */
-public class MyMultimap<K,V> {
-	MyMap<K,List<V>> map = new MyMap<>(); // the primary map
+public class MyMultimap<K,V> implements MultiMap<K, V> {
+	Map<K, List<V>> map = new MyMap<>(); // the primary map
 	int size = 0; // total number of entries in the multimap 
 	
-	//∗∗ Constructs an empty multimap. ∗/
+	/**
+	 * Constructs an empty multimap.
+	 * Runtime Efficiency: O(1), because this method only has constant operations.
+	 */
 	public MyMultimap() { }
 	
-	//Returns the total number of entries in the multimap.
+	/**
+	 * Get the total number of entries in the multimap.
+	 * 
+	 * Runtime Efficiency: O(1), because this method only has constant operations.
+	 * 
+	 * @return	the total number of entries in the multimap.
+	 */
+	@Override
 	public int size() { return size; }
 	
-	//∗∗ Returns whether the multimap is empty. ∗/
+	/**
+	 * Indicates whether the multimap is empty.
+	 * 
+	 * Runtime Efficiency: O(1), because this method only has constant operations.
+	 * 
+	 * @return	true if the multimap is empty.
+	 */
+	@Override
 	public boolean isEmpty() { return (size == 0); }
 	
-	//∗∗ Returns a (possibly empty) list of all values associated with the key. ∗/
+	/**
+	 * Returns a (possibly empty) list of all values associated with the key.
+	 * 
+	 * Runtime Efficiency: O(n), because MyMap needs to iterate through all entries
+	 * 					   in order to get correct key.
+	 * 
+	 * @param key	the given key to search.
+	 * @return	a (possibly empty) list of all values associated with the key.
+	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<V> get(K key) {
 		List<V> valueList = map.get(key); 
@@ -33,7 +61,18 @@ public class MyMultimap<K,V> {
 		return new MyList();
 	}
 	
-	// Adds a new entry associating key with value.
+	/**
+	 * Adds a new entry associating key with value.
+	 * 
+	 * Runtime Efficiency: O(n), because MyMap needs to iterate through all entries
+	 * 					   in order to find if there is the given key exists in the map.
+	 * 					   Then add the value to the valueList associating the key if the 
+	 * 					   given key exists in the map. 
+	 * 
+	 * @param key	given key.	
+	 * @param value	the value associating the given key.
+	 */
+	@Override
 	public void put(K key, V value) {
 		List<V> valueList = map.get(key); 
 		if (valueList == null) {
@@ -43,13 +82,4 @@ public class MyMultimap<K,V> {
 		valueList.add(value);
 		size++;
 		}
-	
-//	//∗∗ Returns an iteration of all entries in the multimap. ∗/ 
-//	Iterable<MyMap.MyMapEntry<K,V>> entries() {
-//		List<Map.Entry<K,V>> result = new LinkedList<>();
-//		for (Map.Entry<K,List<V>> secondary : map.entrySet()) {
-//		K key = secondary.getKey();
-//		for (V value : secondary.getValue())
-//		result.add(new AbstractMap.SimpleEntry<K,V>(key,value)); }
-//		return result; }
 }

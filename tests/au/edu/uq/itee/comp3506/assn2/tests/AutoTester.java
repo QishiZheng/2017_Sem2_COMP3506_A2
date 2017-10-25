@@ -10,6 +10,7 @@ import java.util.List;
 
 import au.edu.uq.itee.comp3506.assn2.api.TestAPI;
 import au.edu.uq.itee.comp3506.assn2.entities.CallRecord;
+import au.edu.uq.itee.comp3506.assn2.entities.MultiMap;
 import au.edu.uq.itee.comp3506.assn2.entities.MyBSTree;
 import au.edu.uq.itee.comp3506.assn2.entities.MyList;
 import au.edu.uq.itee.comp3506.assn2.entities.MyMultimap;
@@ -22,33 +23,34 @@ import au.edu.uq.itee.comp3506.assn2.entities.MyMultimap;
  * @author 
  */
 public final class AutoTester implements TestAPI {
-	// TODO Provide any data members required for the methods below to work correctly with your application.
-	
 	//Initialize a binary search tree for storing all switchIDs
 	static MyBSTree switchIDTree = new MyBSTree();
 	
 	//Initialize a multimap uses dialler as key and a list of CallRecord as value
-	MyMultimap<Long, CallRecord> diallerMultimap = new MyMultimap<Long, CallRecord>();
+	static MultiMap<Long, CallRecord> diallerMultimap = new MyMultimap<Long, CallRecord>();
 	
 	//Initialize a multimap uses receiver as key and a list of CallRecord as value
-	MyMultimap<Long, CallRecord> receiverMultimap = new MyMultimap<Long, CallRecord>();
+	static MultiMap<Long, CallRecord> receiverMultimap = new MyMultimap<Long, CallRecord>();
 	//Initialize a list of call records
-	MyList<CallRecord> callRecList  = new MyList<CallRecord>();
+	static MyList<CallRecord> callRecList  = new MyList<CallRecord>();
 
 	public AutoTester() {
 		//fill in switchIDTree with all data from switches.txt
 		switchIDTree = switchReader("data/switches.txt");
-		//store all call records from file in a temp list
-		List<CallRecord> allRecords = callRecordReader("data/call-records.txt");
-		//fill in my data structures with data
-		for (CallRecord callRec:allRecords) {
-			//fill in diallerMultimap
-			diallerMultimap.put(callRec.getDialler(), callRec);
-			//fill in receiverMultimap
-			receiverMultimap.put(callRec.getReceiver(), callRec);
-			//fill in my callRecList
-			callRecList.add(callRec);
-		}
+		//read call records file and fill in data strutures
+		callRecordReader("data/call-records.txt");
+
+//		//store all call records from file in a temp list
+//		//List<CallRecord> allRecords = callRecordReader("data/call-records.txt");
+//		//fill in my data structures with data
+//		for (CallRecord callRec:allRecords) {
+//			//fill in diallerMultimap
+//			diallerMultimap.put(callRec.getDialler(), callRec);
+//			//fill in receiverMultimap
+//			receiverMultimap.put(callRec.getReceiver(), callRec);
+//			//fill in my callRecList
+//			callRecList.add(callRec);
+//		}
 		
 		//adds connection counts to every switches in switchIDTree
 		for(int i = 0; i < callRecList.size(); i++) {	//iterate over all call records
@@ -384,6 +386,13 @@ public final class AutoTester implements TestAPI {
 			}
 	}
 
+	/**
+	 * Tests search 6 from the assignment specification.
+	 * 
+	 * @param startTime Start of time period.
+	 * @param endTime End of time period.
+	 * @return List of details of all calls made between start and end time.
+	 */
 	@Override
 	public List<CallRecord> callsMade(LocalDateTime startTime, LocalDateTime endTime) {
 		List<CallRecord> result = new ArrayList<CallRecord>();
@@ -399,12 +408,11 @@ public final class AutoTester implements TestAPI {
 	
 	
 	/**
-	 * Reads all call records from text file 
+	 * Reads all valid call records from text file and add them into callRecList, diallerMultimap, and receiverMultimap
 	 * @param fileName, the file path for reading
-	 * @return a list of CallRecord
 	 */
-	private static List<CallRecord> callRecordReader(String filePath) {
-		List<CallRecord> result = new ArrayList<CallRecord>();
+	private static void callRecordReader(String filePath) {
+		//List<CallRecord> result = new ArrayList<CallRecord>();
 		String line;
 		try {
 			FileReader fr = new FileReader(filePath);
@@ -440,14 +448,16 @@ public final class AutoTester implements TestAPI {
 								path,	//connection path
 								LocalDateTime.parse(tokens[tokens.length-1]));	//timeStamp
 						
-						//add the callRecord to result if it is a valid record
+						//add to my data structures if this is a valid record
 						if (callRecValidator(callRec)) {
-							result.add(callRec);
+							callRecList.add(callRec);
+							diallerMultimap.put(callRec.getDialler(), callRec);
+							receiverMultimap.put(callRec.getReceiver(), callRec);
 						}
 					}
 				}
 				
-				line = input.readLine();
+				line = input.readLine();	//read next line
 			}
 			input.close();
 			fr.close();
@@ -455,7 +465,7 @@ public final class AutoTester implements TestAPI {
 		} catch (IOException e ) {
 			e.printStackTrace();
 		}
-		return result;
+		//return result;
 	}
 	
 	/**
@@ -548,130 +558,8 @@ public final class AutoTester implements TestAPI {
 
 	
 	public static void main(String[] args) {
-//		Long testStartTime = System.currentTimeMillis();
-//		LocalDateTime startTime = LocalDateTime.parse("2017-09-21T15:02:21.142");
-//		LocalDateTime endTime = LocalDateTime.parse("2017-09-21T20:02:21.142");
-//		
-//		AutoTester test = new AutoTester();
-//		Long initTime = System.currentTimeMillis();
-//		System.out.println("\nInitialization Time: " + (initTime - testStartTime));
-//				
-//		Long dialler = 2697621983L;
-//		System.out.println("\nDialler: "+dialler);
-//		List<Long>  receivers = test.called(dialler);
-//		System.out.println("Receivers: "+receivers);
-//		System.out.println("size: "+receivers.size());
-//		Long search1aEndTime = System.currentTimeMillis();
-//		System.out.println("Search 1a execution Time: " + (search1aEndTime - initTime));
-//	
-//		List<Long> withTime = test.called(dialler,startTime,endTime);
-//		System.out.println("\nStart at: " + startTime + "\nendTime: " + endTime + "\n" +withTime);
-//		System.out.println("size: "+withTime.size());
-//		Long search1bEndTime = System.currentTimeMillis();
-//		System.out.println("Search 1b execution Time: " + (search1bEndTime - search1aEndTime));
-//		
-//		Long receiver = 5585599930L;
-//		System.out.println("\nReceiver: " + receiver);
-//		List<Long> diallers = test.callers(receiver);
-//		System.out.println("Diallers: " + diallers);
-//		System.out.println("size: " + diallers.size());
-//		Long search2aEndTime = System.currentTimeMillis();
-//		System.out.println("Search 2a execution Time: " + (search2aEndTime - search1bEndTime));
-//		
-//		List<Long> receiversWithTime = test.callers(receiver,startTime,endTime);
-//		System.out.println("\nStart at: " + startTime + "\nendTime: " + endTime + "\n" +receiversWithTime);
-//		System.out.println("Size: " + receiversWithTime.size());
-//		Long search2bEndTime = System.currentTimeMillis();
-//		System.out.println("Search 2b execution Time: " + (search2bEndTime - search2aEndTime));
-//		
-////		for (int i=0 ;i < test.diallerMultimap.get(dialler).size();i++) {
-////		System.out.println(test.diallerMultimap.get(dialler).get(i).getConnectionPath());
-////	}
-//		
-//		List<Integer> dFault = test.findConnectionFault(dialler);
-//		System.out.println("\nDailler " + dialler + " has faults: \n" + dFault);
-//		Long search3a1EndTime = System.currentTimeMillis();
-//		System.out.println("Search 3a1 execution Time: " + (search3a1EndTime - search2bEndTime));
-//		
-//		List<Integer> dFaultInTime = test.findConnectionFault(dialler, startTime, endTime);
-//		System.out.println("\nDailler " + dialler + "\nStart at: " + startTime + "\nendTime: " + endTime + " has faults: \n" + dFaultInTime);
-//		Long search3a2EndTime = System.currentTimeMillis();
-//		System.out.println("Search 3a2 execution Time: " + (search3a2EndTime - search3a1EndTime));
-//		
-//		List<Integer> rFault = test.findReceivingFault(receiver);
-//		System.out.println("\nReceiver " + receiver + " has faults: \n" + rFault);
-//		Long search3b1EndTime = System.currentTimeMillis();
-//		System.out.println("Search 3b1 execution Time: " + (search3b1EndTime - search3a2EndTime));
-//		
-//		List<Integer> rFaultInTime = test.findConnectionFault(receiver, startTime, endTime);
-//		System.out.println("\nReceiver " + receiver + "\nStart at: " + startTime + "\nendTime: " + endTime + " has faults: \n" + rFaultInTime);
-//		Long search3b2EndTime = System.currentTimeMillis();
-//		System.out.println("Search 3a2 execution Time: " + (search3b2EndTime - search3b1EndTime));
-//		
-//		int switchWithMax = test.maxConnections();
-//		Long search4aEndTime = System.currentTimeMillis();
-//		System.out.println("\nSwitch with max connections is: " + switchWithMax + 
-//				"\n has connection amount: " + switchIDTree.getMaxCountNode(switchIDTree.getRoot()).getCount());
-//		System.out.println("Search 4a Execution time: " + (search4aEndTime - search3b2EndTime));
-//		
-//		int switchWithMaxInTime = test.maxConnections(startTime, endTime);
-//		Long search4bEndTime = System.currentTimeMillis();
-//		System.out.println("\nBetween " + startTime + " and "+ endTime  +"\nSwitch with max connections is: " + switchWithMaxInTime + 
-//				"\n has connection amount: ");
-//		System.out.println("Search 4b Execution time: " + (search4bEndTime - search4aEndTime));
-//		
-//		int switchWithMin = test.minConnections();
-//		Long search5aEndTime = System.currentTimeMillis();
-//		System.out.println("\nSwitch with min connections is: " + switchWithMin + 
-//				"\n has connection amount: " + switchIDTree.getMinCountNode(switchIDTree.getRoot()).getCount());
-//		System.out.println("Search 5a Execution time: " + (search5aEndTime - search4bEndTime));
-//		
-//		int switchWithMinInTime = test.minConnections(startTime, endTime);
-//		Long search5bEndTime = System.currentTimeMillis();
-//		System.out.println("\nBetween " + startTime + " and "+ endTime  +"\nSwitch with min connections is: " + switchWithMinInTime + 
-//				"\n has connection amount: ");
-//		System.out.println("Search 5b Execution time: " + (search5bEndTime - search5aEndTime));
-//		
-//		List<CallRecord> allRecInTime = test.callsMade(startTime, endTime);
-//		Long search6EndTime = System.currentTimeMillis();
-//		System.out.println("\nAll Calls made in time range: " + allRecInTime.size());
-//		System.out.println("Search 6a execution Time: " + (search6EndTime - search5bEndTime));
-//		
-//		Long testEndTime = System.currentTimeMillis();
-//		System.out.println("\n\nTotal Execytion Time: " + (testEndTime - testStartTime));
-//		
-
-//		//test fro number of invalid records in file
-//		AutoTester test = new AutoTester();
-//		List<CallRecord> allRecs = test.callRecordReader("data/call-records-short.txt");
-//		System.out.println("\nTotal Number of invalid record: " + (6500 - allRecs.size()));
+		AutoTester test = new AutoTester();
 		
-
-		
-//		List<CallRecord> test = new ArrayList<CallRecord>();
-//		MyMultimap<Long, CallRecord> mapTest = new MyMultimap<Long, CallRecord>();
-//		test = callRecordReader("data/call-records-short.txt");
-//		for (CallRecord callRec:test) {
-//			mapTest.put(callRec.getDialler(), callRec);
-//		}
-//		
-//		Long dialler = 5332712146L;
-//		System.out.println("Dialler: "+dialler);
-//		System.out.println("CallRecords Number: " + mapTest.get(dialler).size());
-//		System.out.println("CallRecords: ");
-//		for (int i = 0; i< mapTest.get(dialler).size();i++) {
-//			
-//			System.out.println(mapTest.get(dialler).get(i));
-//		}
-//		//System.out.println(mapTest.get(dialler));
-//		System.out.println("All Record: " + mapTest.size());
-
-		
-//		MyBSTree testTree = switchReader("data/switches.txt");
-//		System.out.println("Total Switch Number: " + testTree.size());
-//		System.out.println("All Switch IDs: ");
-//		//testTree.dis­play(testTree.getRoot());
-		
-		
+		System.out.println("AutoTester Stub");
 	}
 }

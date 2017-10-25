@@ -1,15 +1,36 @@
 package au.edu.uq.itee.comp3506.assn2.entities;
 
+/**
+ * Implementation of MyBinarySearchTree.
+ * 
+ * Memory Efficiency: O(n), it would take n space in memory to store n elements in the binary search tree.
+ * 					  Each node stored an ID and a count of that id, so to more exactly it is 2n.
+ * 
+ * @author Qishi Zheng <Student No. 43759453>.
+ *
+ */
 public class MyBSTree implements MyBinarySearchTree {
 	private Node root;
 	private int size;
 
+	/**
+	 * Constructs an empty MyBSTree.
+	 * 
+	 *  Runtime Efficiency: O(1), because this method only has constant operations.
+	 */
 	public MyBSTree() {
 		this.root = null;
 		this.size = 0;
 	}
 
-	// Add a node the tree with value n. Its O(lgn);
+
+	/**
+	 * Add a node into the tree with value n.
+	 * 
+	 * Runtime Efficiency: O(logn), it takes O(logn) time to find correct place in the tree to insert the new id.
+	 *
+	 *@param id,	the id to insert.
+	 */
 	@Override
 	public void add(int id) {
 		// Create a new node to store this id
@@ -43,7 +64,14 @@ public class MyBSTree implements MyBinarySearchTree {
 		}
 	}
 
-	// Check if the id exist in the tree. Its O(lgn)
+	/**
+	 * Check if the id exist in the tree. 
+	 * 
+	 * Runtime Efficiency: O(logn), it takes O(logn) time to find the given id from root.
+	 * 
+	 * @param id,	the given id to check.
+	 * @return trure if the given id is found in the tree.
+	 */
 	@Override
 	public boolean isExist(int id) {
 		// start at root;
@@ -61,7 +89,14 @@ public class MyBSTree implements MyBinarySearchTree {
 		return false;
 	}
 
-	// get the node with given id. Its O(lgn)
+	/*
+	 * Get the node with given id. Its O(logn)
+	 * 
+	 * Runtime Efficiency: O(logn), it takes O(logn) time to find the node with given id from root.
+	 * 
+	 * @param id,  given id of node.
+	 * @return	the node with given id.
+	 */
 	public Node getNode(int id) {
 		// start at root;
 		Node current = root;
@@ -78,9 +113,11 @@ public class MyBSTree implements MyBinarySearchTree {
 	}
 
 	/**
-	 * increase the count of node with given id
+	 * Increase the count of node with given id
 	 * 
-	 * @param id
+	 * Runtime Efficiency: O(logn), it takes O(logn) time to find the node with given id from root.
+	 * 
+	 * @param id,	the id of node that we want to increase count
 	 */
 	public void increaseCount(int id) {
 		Node target = getNode(id);
@@ -89,22 +126,15 @@ public class MyBSTree implements MyBinarySearchTree {
 		}
 	}
 
-//	/* To get max value in a binary tree . time: O(n)*/ 
-//	public int getMaxCount(Node node) {
-//		int max = node.count;
-//		if (node.left != null) {
-//			max = Math.max(max, getMaxCount(node.left));
-//		}
-//		if (node.right != null) {
-//			max = Math.max(max, getMaxCount(node.right));
-//		}
-//		return max;
-//	}
 	
 	/**
-	 * Get the node with max count in tree. time: O(n)
-	 * @param node
-	 * @return the node with max count in tree.
+	 * Get the node with max count in tree.
+	 * 
+	 * Runtime Efficiency: O(n),  because we need to iterate through
+	 *  					the whole tree in order to find the node with greatest count.
+	 * 
+	 * @param node	the top node in the tree/subtree to search from.
+ 	 * @return the node with max count in tree/subtree from node.
 	 */
 	public Node getMaxCountNode(Node node) {
 		Node maxNode = node;
@@ -118,9 +148,13 @@ public class MyBSTree implements MyBinarySearchTree {
 	}
 	
 	/**
-	 * Get the node with min count in tree. time: O(n)
-	 * @param node
-	 * @return the node with min count in tree.
+	 * Get the node with min counts in tree.
+	 * 
+	 *  Runtime Efficiency: O(n),  because we need to iterate through
+	 *  					the whole tree in order to find the node with smallest count.
+	 * 
+	 * @param node	the top node in the tree/subtree to search from.
+ 	 * @return the node with min count in tree/subtree from node.
 	 */
 	public Node getMinCountNode(Node node) {
 		Node minNode = node;
@@ -134,8 +168,11 @@ public class MyBSTree implements MyBinarySearchTree {
 	}
 	
 	/**
-	 * Returns the node with more counts between two nodes. 
-	 * If two nodes have same count, then returns the one with greater ID number
+	 * Returns the node with greater counts between two nodes. 
+	 * If two nodes have same count, then returns the one with smaller ID number.
+	 * 
+	 * Runtime Efficiency: O(1), because this method only has constant operations.
+	 * 
 	 * @param node1 first node
 	 * @param node2 second node
 	 * @return the node with more counts between two nodes
@@ -161,9 +198,12 @@ public class MyBSTree implements MyBinarySearchTree {
 	 * exclude node with count equals to 0. 
 	 * if two nodes have same count, then returns the one with smaller ID number
 	 *
+	 * Runtime Efficiency: O(1), because this method only has constant operations.
+	 *
 	 * @param node1 first node
 	 * @param node2 second node
-	 * @return the node with less counts between two nodes. If two nodes have same count, then returns the one with smaller ID number
+	 * @return the node with less counts between two nodes.
+	 * 
 	 */
 	private Node nodeWithMin(Node node1, Node node2) {
 		int minID;
@@ -188,29 +228,36 @@ public class MyBSTree implements MyBinarySearchTree {
 	}
 
 	/**
+	 * Return the number of elements in the tree.
 	 * 
-	 * @return size of the tree, that is the number of elements stored in the
-	 *         tree
+	 * Runtime Efficiency: O(1), because this method only has constant operations.
+	 * 
+	 * @return size of the tree, that is the number of elements stored in the tree.
+	 *         
 	 */
 	public int size() {
 		return this.size;
 	}
 
 	/**
+	 * Returns the root node in the tree. 
 	 * 
-	 * @return the root node of this tree
+	 * Runtime Efficiency: O(1), because this method only has constant operations.
+	 * 
+	 * @return the root node of this tree.
 	 */
 	public Node getRoot() {
 		return this.root;
 	}
 
 	/**
-	 * Nested Node class for My Binary Search Tree
-	 * 
-	 * @author
+	 * Nested Node class for My Binary Search Tree.
 	 *
-	 * @param id
-	 *            integer stored in this node
+	 * Memory Efficiency: O(n), it would take 3n space in memory to store n node 
+	 * 							since each node has left and right node.
+	 * 
+	 * @author Qishi Zheng <Student No. 43759453>.
+	 *
 	 */
 	public class Node {
 		private int id;
@@ -219,10 +266,11 @@ public class MyBSTree implements MyBinarySearchTree {
 		private int count;
 
 		/**
-		 * Constructs a node with data stored in it
+		 * Constructs a node with id stored in it.
 		 * 
-		 * @param data
-		 *            data stored in this node
+		 * Runtime Efficiency: O(1), because this method only has constant operations.
+		 * 
+		 * @param id	id stored in this node.
 		 */
 		public Node(int id) {
 			this.id = id;
@@ -232,6 +280,9 @@ public class MyBSTree implements MyBinarySearchTree {
 		}
 		
 		/**
+		 * Get the ID stored in this node.
+		 *
+		 * Runtime Efficiency: O(1), because this method only has constant operations.
 		 * 
 		 * @return id of this node
 		 */
@@ -240,6 +291,9 @@ public class MyBSTree implements MyBinarySearchTree {
 		}
 		
 		/**
+		 * Get the counts of ID in the node.
+		 * 
+		 * Runtime Efficiency: O(1), because this method only has constant operations.
 		 * 
 		 * @return count stored in this node.
 		 */
@@ -247,31 +301,4 @@ public class MyBSTree implements MyBinarySearchTree {
 			return this.count;
 		}
 	}
-
-//	public static void main(String arg[]) {
-//		MyBSTree b = new MyBSTree();
-//		b.add(3);
-//		b.add(8);
-//		b.add(1);
-//		b.add(4);
-//		b.add(6);
-//		b.add(2);
-//		b.add(10);
-//		b.add(9);
-//		b.add(20);
-//		b.add(25);
-//		b.add(15);
-//		b.add(16);
-//		System.out.println("Original Tree Size : ");
-//		// b.dis­play(b.root);
-//		System.out.println("\n" + b.size());
-//		System.out.println("");
-//		System.out.println("Check whether Node with value 45 exists : " + b.isExist(4));
-//		b.increaseCount(3);
-//		b.increaseCount(15);b.increaseCount(15);
-//		b.increaseCount(15);
-//		b.increaseCount(20);b.increaseCount(20);b.increaseCount(20);b.increaseCount(20);
-//		System.out.println("Max Cout Node is: " + b.getMaxCountNode(b.root).id);
-//	}
-
 }
