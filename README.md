@@ -2,12 +2,12 @@
 This is a copy of my solution for the COMP3506 Data Struture and Algorithms Assignment 2 in 2017.
 Nothing from Java Framework Collection in the JDK was used for the implementation of the Abstract Data Types (ADTs) or Concrete Data Types (CDTs) in the assignment. The implementation of the data structures used in the assignment was based on basic Java language constructs and not libraries.
 
-##Assignment Contents
-###Introduction
+## Assignment Contents
+### Introduction
 Telephone networks are complex physical infrastructure that have wide geographic distribution. Australia has over 13,000 mobile phone towers that provide connection points to the physical phone network. The phone network itself has hundreds of switches routing phone calls through the physical network. The network is a hierarchical in structure with small switches handling direct connections in a small geographic area and then a connection to a larger switch that handles connections over a larger area. The network design caters for five levels of switches but modern technology has reduced the number of levels required.
 Given the complexity of the phone network, and the hundreds of thousands of kilometres of cabling in the network, faults are difficult to find. Phone companies use a variety of tools to identify and trace faults in the network. For this assignment, you will implement a tool that identifies faults in the phone network based on call connection data. The data has been simplified to ignore the levels of switches and whether they are a switch or base station. For simple fault tracing in the real application these distinctions are also not relevant.
 
-###Details
+### Details
 You are provided with files representing two sets of data. One lists the identifiers of the switches in the network. The other is the record of phone calls.
 The first line of the file containing the current list of all switch identifiers is a single integer that is the number of switches in the phone network. Each remaining line in the file is an identifier of a single switch. Each switch has a unique five-digit identifier. You may assume that the contents of this file are correct.
 The record of phone calls contains data about which phone number attempted to call which other number over a time period. This data includes the path taken to connect the call through the network. The path is represented by a sequence of switch identifiers, which are in the order in which the call was routed.
@@ -18,7 +18,7 @@ the hour, mm being two digits representing the minute, ss being two digits repre
 The data files are generated from a Unix environment so may not display nicely in a simple MS Windows text editor, such as NotePad.
 As the phone call records data comes from the switch logs and is transmitted over the phone network, it can be corrupted. When reading the data you will need to make sure that you only store valid data. Any invalid call records can be discarded. For the purposes of this assignment you can assume that the phone numbers and timestamp are not corrupted. You only need to check the switch identifiers to ensure that they are valid.
 Your application needs to store the data in appropriate data structures allowing efficient searching. Part of your mark will be based on the data structures you use and your justification of your choices.
-####Tasks
+#### Tasks
 Your application needs to implement the following searches:
 1. Find all receiving phone numbers called from a single dialling phone number.
 2. Find all phone numbers that dialled a single receiving phone number.
