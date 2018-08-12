@@ -1,5 +1,6 @@
 # 2017_Sem2_COMP3506_A2
-This is a copy of my solution for the COMP3506 Data Struture and Algorithms Assignment 2 in 2017.
+This is a copy of my solution for the COMP3506 Algorithms Data and Structure Assignment 2 in 2017 Semster 2 at The University of Queensland.
+
 Nothing from Java Framework Collection in the JDK was used for the implementation of the Abstract Data Types (ADTs) or Concrete Data Types (CDTs) in the assignment. The implementation of the data structures used in the assignment was based on basic Java language constructs and not libraries.
 
 ## Assignment Contents
